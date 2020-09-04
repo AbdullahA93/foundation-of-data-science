@@ -8,7 +8,7 @@ if __name__ == "__main__":
     independent = ["SepalLengthCm",	"SepalWidthCm",	"PetalLengthCm",	"PetalWidthCm"]
     X = data_train[independent]
     y = data_train["Species"]
-    # Train model
+    # Train model **
     clf = my_DT()
     clf.fit(X,y)
     # Load testing data
