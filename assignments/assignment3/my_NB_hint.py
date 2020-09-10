@@ -18,25 +18,16 @@ class my_NB:
         self.classes_ = list(set(list(y)))
         # for calculation of P(y)
         self.P_y = Counter(y)
-        # self.P[yj][Xi][xi] = P(xi|yi) where Xi is the feature name and xi is the feature value, yj is a specific class label
+        # self.P[yj][Xi][xi] = P(xi|yj) where Xi is the feature name and xi is the feature value, yj is a specific class label
+        # make sure to use self.alpha in the __init__() function as the smoothing factor when calculating P(xi|yj)
         self.P = {}
-        for label in self.classes_:
-            if label not in self.P:
-                self.P[label] = {}
-            for x in X:
-                count = np.count_nonzero(X[x][y == label])
-                temp = Counter(X[x][y == label])
-                self.P[label][x] = {}
-                divider=len(list(set(X[x])))
-                for instance in X[x]:
-                    if temp.get(instance) == None:
-                        self.P[label][x][instance] = self.alpha/(count + (divider*self.alpha))
-                    else:
-                        self.P[label][x][instance] = (temp.get(instance)+self.alpha) / (count + (divider*self.alpha))
 
 
 
 
+
+        
+        return
 
     def predict_proba(self, X):
         # X: pd.DataFrame, independent variables, str
@@ -45,16 +36,14 @@ class my_NB:
         # write your code below
         probs = {}
         for label in self.classes_:
-            p = [self.P_y[label]]
+            p = self.P_y[label]
             for key in X:
-
                 p *= X[key].apply(lambda value: self.P[label][key][value] if value in self.P[label][key] else 1)
             probs[label] = p
         probs = pd.DataFrame(probs, columns=self.classes_)
         sums = probs.sum(axis=1)
         probs = probs.apply(lambda v: v / sums)
         return probs
-
 
     def predict(self, X):
         # X: pd.DataFrame, independent variables, str
