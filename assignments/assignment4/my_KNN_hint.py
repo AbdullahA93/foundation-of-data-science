@@ -20,45 +20,26 @@ class my_KNN:
         self.X = X
         self.y = y
 
-
+        print(list(set(list(y))))
         return
 
     def dist(self,x):
-        distances=[]
         # Calculate distances of training data to a single input data point (np.array)
         if self.metric == "minkowski":
-         for i in range(len(self.X)):
-             arr =0.0
-             for j in range(len(x)):
-                 arr+=((abs(self.X.iloc[i][j]-x[j]))**self.p)**(1/self.p)
-             distances.append(arr)
-         return distances
+            distances = "write your own code"
+
 
         elif self.metric == "euclidean":
-         for i in range(len(self.X)):
-             arr = 0.0
-             for j in range(len(x)):
-                arr+=np.square(self.X.iloc[i][j]-x[j])
-             distances.append(np.sqrt(arr))
-         return distances
+            distances = "write your own code"
+
 
         elif self.metric == "manhattan":
-         for i in range(len(self.X)):
-             arr = 0.0
-             for j in range(len(x)):
-                 arr+=(abs(self.X.iloc[i][j] - x[j]))
-             distances.append(arr)
-         return distances
+            distances = "write your own code"
+
 
         elif self.metric == "cosine":
-            for i in range(len(self.X)):
-                v1,v2,den = 0,0,0
-                for j in range(len(x)):
-                    v1 +=x[j] ** 2
-                    v2 += self.X.iloc[i][j] ** 2
-                    den += x[j] *self.X.iloc[i][j]
-                distances.append(1-(den/ (np.sqrt(v1)*np.sqrt(v2))))
-            return distances
+            distances = "write your own code"
+
 
         else:
             raise Exception("Unknown criterion.")
@@ -68,14 +49,10 @@ class my_KNN:
         # Return the stats of the labels of k nearest neighbors to a single input data point (np.array)
         # Output: Counter(labels of the self.n_neighbors nearest neighbors)
         distances = self.dist(x)
-        list=[]
-        output = []
-        for i in range(len(self.X)):
-            list.append((i,self.y[i], distances[i]))
-        list.sort(key=lambda tuple: tuple[2])
-        for j in range(self.n_neighbors):
-            output.append(list[j][1])
-        output = Counter(output)
+        output = "write your own code"
+
+
+
         return output
 
     def predict(self, X):
