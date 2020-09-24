@@ -35,6 +35,7 @@ class my_AdaBoost:
             error = np.sum(diffs * w)
             while error >= (1 - 1.0 / k):
                 w = np.array([1.0 / n] * n)
+                set_trace(w)
                 sample = np.random.choice(n, n, p=w)
                 # Train base classifier with sampled training data
                 sampled = X.iloc[sample]
@@ -45,13 +46,11 @@ class my_AdaBoost:
                 # Compute error rate and alpha for estimator i
                 error = np.sum(diffs * w)
             # Compute alpha for estimator i
-            alpha1= np.log((1-error)/error)+np.log(k-1)
-            self.alpha.append(alpha1)
-            #update wight
-            for s in range(len(diffs)):
-                if diffs[s]:
-                    w[s] *= np.exp(alpha1)
-            w= w/sum(w)
+            self.alpha.append("write your own code")
+
+            # Update wi
+            w = "write your own code"
+
         # Normalize alpha
         self.alpha = self.alpha / np.sum(self.alpha)
         return
@@ -70,23 +69,15 @@ class my_AdaBoost:
         # return probs = pd.DataFrame(list of prob, columns = self.classes_)
         # write your code below
         probs = {}
-
-        for x in self.classes_:
+        for label in self.classes_:
             # Calculate probs for each label
             "write your own code"
-            probs[x] = {}
-            #counter
-            c = 0
-            for i in range(len(X)):
-                result = 0
-                for j in range(self.n_estimators):
-                    result+= sum(self.alpha[j] * (self.estimators[j].predict(X.iloc[i].values.reshape(1, -1)) == x))
-                probs[x][c] = result
-                c+=1
+
 
 
         probs = pd.DataFrame(probs, columns=self.classes_)
         return probs
+
 
 
 
