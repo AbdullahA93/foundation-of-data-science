@@ -50,7 +50,7 @@ class my_AdaBoost:
             #update wight
             for s in range(len(diffs)):
                 if diffs[s]:
-                    w[s] *= np.exp(alpha1)
+                   w[s] *= np.exp(alpha1)
             w= w/sum(w)
         # Normalize alpha
         self.alpha = self.alpha / np.sum(self.alpha)
@@ -70,24 +70,17 @@ class my_AdaBoost:
         # return probs = pd.DataFrame(list of prob, columns = self.classes_)
         # write your code below
         probs = {}
-
         for x in self.classes_:
             # Calculate probs for each label
-            "write your own code"
+            # x = label
             probs[x] = {}
             #counter
             c = 0
             for i in range(len(X)):
                 result = 0
                 for j in range(self.n_estimators):
-                    result+= sum(self.alpha[j] * (self.estimators[j].predict(X.iloc[i].values.reshape(1, -1)) == x))
+                    result+= np.sum(self.alpha[j] * (self.estimators[j].predict(X.iloc[i].values.reshape(1, -1)) == x))
                 probs[x][c] = result
                 c+=1
-
-
         probs = pd.DataFrame(probs, columns=self.classes_)
         return probs
-
-
-
-
