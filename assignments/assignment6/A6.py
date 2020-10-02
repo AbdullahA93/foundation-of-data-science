@@ -24,4 +24,4 @@ if __name__ == "__main__":
     # Transform test data to cluster-distance space
     dists = clf.transform(X_test)
     print("Testing data:")
-    print(dists)
+    print(clf.predict(X_test))
