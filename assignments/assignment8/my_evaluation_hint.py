@@ -1,5 +1,6 @@
 import numpy as np
 from collections import Counter
+import pandas as pd
 
 
 class my_evaluation:
@@ -26,25 +27,29 @@ class my_evaluation:
         # no return variables
         # write your own code below
         correct = self.predictions == self.actuals
-        wrong = self.predictions != self.actuals
-        self.acc = float(Counter(correct)[True]) / len(correct)
-        self.confusion_matrix = {}
+        matrix = pd.crosstab(self.predictions, self.actuals)
+        print(matrix)
         index_c = {}
         for c in (Counter(correct)):
             index_c[c] = []
         for label in enumerate(correct):
             index_c[label[1]].append(label[0])
         index = []
-        for i, k in index_c.items():
+        for i,k in index_c.items():
             index.append(k)
+        wrong = self.predictions != self.actuals
+        self.acc = float(Counter(correct)[True]) / len(correct)
+        self.confusion_matrix = {}
         for label in self.classes_:
-            tp = len(self.predictions[np.intersect1d(index[0], np.where(self.predictions == label))])
-            fp = len(
-                self.predictions[np.intersect1d(np.where(self.predictions == label), np.where(self.actuals != label))])
-            tn = len(
-                self.predictions[np.intersect1d(np.where(self.predictions != label), np.where(self.actuals != label))])
-            fn = len(self.predictions[np.intersect1d(index[1], np.where(self.actuals == label))])
+            tp = len(self.predictions[np.intersect1d(index[0],np.where(self.predictions == label))])
+            print(tp)
+            fp = len(self.predictions[np.intersect1d(np.where(self.predictions == label),np.where(self.actuals!=label))])
+            print(fp)
+            tn = len(self.predictions[np.intersect1d(np.where(self.predictions != label),np.where(self.actuals!=label))])
+            print(tn)
+            fn = len(self.predictions[np.intersect1d(index[1],np.where(self.actuals == label))])
             self.confusion_matrix[label] = {"TP": tp, "TN": tn, "FP": fp, "FN": fn}
+        print(self.confusion_matrix)
         return
 
     def accuracy(self):
@@ -58,6 +63,7 @@ class my_evaluation:
         # average: {"macro", "micro", "weighted"}. If target==None, return average precision
         # output: prec = float
         # note: be careful for divided by 0
+
         if self.confusion_matrix == None:
             self.confusion()
         if target in self.classes_:
@@ -125,6 +131,7 @@ class my_evaluation:
                     else:
                         raise Exception("Unknown type of average.")
                     rec += rec_label * ratio
+        "write your own code"
         return rec
 
     def f1(self, target=None, average="macro"):
@@ -133,9 +140,9 @@ class my_evaluation:
         # average: {"macro", "micro", "weighted"}. If target==None, return average f1
         # output: f1 = float
 
-        prec = self.precision(target=target, average=average)
-        rec = self.recall(target=target, average=average)
-        f1_score = 2 * prec * rec / (prec + rec)
+        prec = self.precision(target=target)
+        rec = self.recall(target=target)
+        f1_score = 2 * ((prec*rec)/(prec+rec))
         return f1_score
 
     def auc(self, target):
@@ -155,17 +162,16 @@ class my_evaluation:
                 auc_target = 0
                 for i in order:
                     if self.actuals[i] == target:
-                        tp += 1
-                        fn -= 1
+                        tp = self.confusion_matrix[target]["TP"]
+                        fn = self.confusion_matrix[target]["FN"]
                         tpr = tp/(tp+fn)
                     else:
-                        fp += 1
-                        tn -= 1
+                        fp = self.confusion_matrix[target]["FP"]
+                        tn = self.confusion_matrix[target]["TN"]
                         pre_fpr = fpr
                         fpr = fp/(fp+tn)
-                        auc_target += tpr * (fpr - pre_fpr)
+                        auc_target = 1/2 - fpr/2 + tpr/2
             else:
                 raise Exception("Unknown target class.")
 
             return auc_target
-
