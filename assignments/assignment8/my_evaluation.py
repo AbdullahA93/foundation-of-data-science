@@ -38,12 +38,10 @@ class my_evaluation:
         for i, k in index_c.items():
             index.append(k)
         for label in self.classes_:
-            tp = len(self.predictions[np.intersect1d(index[0], np.where(self.predictions == label))])
-            fp = len(
-                self.predictions[np.intersect1d(np.where(self.predictions == label), np.where(self.actuals != label))])
-            tn = len(
-                self.predictions[np.intersect1d(np.where(self.predictions != label), np.where(self.actuals != label))])
-            fn = len(self.predictions[np.intersect1d(index[1], np.where(self.actuals == label))])
+            tp = Counter(correct & (self.predictions == label))[True]
+            fp = Counter((self.actuals != label) & (self.predictions == label))[True]
+            tn = Counter(correct & (self.predictions != label))[True]
+            fn = Counter((self.actuals == label) & (self.predictions != label))[True]
             self.confusion_matrix[label] = {"TP": tp, "TN": tn, "FP": fp, "FN": fn}
         return
 
