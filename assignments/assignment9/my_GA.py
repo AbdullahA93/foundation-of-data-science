@@ -186,11 +186,12 @@ class my_GA:
         def cross(a, b):
             new_point = []
             for i in range(len(a)):
-                if not a:
+                if new_point not in a:
                     new_point.append(a[i])
                 else:
                     new_point.append(b[i])
             return tuple(new_point)
+
 
         to_add = []
         for _ in range(self.generation_size - len(self.generation)):
