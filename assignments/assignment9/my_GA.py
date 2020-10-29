@@ -57,7 +57,6 @@ class my_GA:
         ######################
         # check if size of generation is correct
         assert (len(self.generation) == self.generation_size)
-        # print(self.generation)
         return self.generation
 
     def evaluate(self, decision):
@@ -120,7 +119,7 @@ class my_GA:
         # (exist x and y; self.is_better(x, y) == 1)
         # replace that point y in pf_best with the point x in pf_new
         # If one point x in pf_new is not dominated by any point y in pf_best (and does not exist in pf_best)
-        # (forall y in pf_best; self.is_better(y, x) == -1)
+        # (for all y in pf_best; self.is_better(y, x) == -1)
         # add that point x to pf_best
         # Return True if pf_best is modified in the process, otherwise return False
         # Write your own code below
@@ -139,7 +138,7 @@ class my_GA:
                 if self.is_better(pf_best[i], pf_new[j]) == -1:
                     not_dominated = False
                     break
-            if not_dominated:
+            if not_dominated :
                 to_add.append(j)
                 modified = True
         for j in to_add:
@@ -186,12 +185,11 @@ class my_GA:
         def cross(a, b):
             new_point = []
             for i in range(len(a)):
-                if new_point not in a:
+                if i != 2:
                     new_point.append(a[i])
                 else:
                     new_point.append(b[i])
             return tuple(new_point)
-
 
         to_add = []
         for _ in range(self.generation_size - len(self.generation)):
